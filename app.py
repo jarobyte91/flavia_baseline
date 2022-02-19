@@ -10,12 +10,13 @@ from nltk.tokenize import PunktSentenceTokenizer
 import json
 import pandas as pd
 
-server = Flask(__name__)
+# server = Flask(__name__)
 app = Dash(
     __name__,
     external_stylesheets = [dbc.themes.BOOTSTRAP],
-    server = server
+    # server = server
 )
+server = app.server
 
 ###################################
 # Upload tab
@@ -305,4 +306,4 @@ def download_csv(clicks, sentences, relevant):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, host = "0.0.0.0", port = 8040)
+    app.run_server(debug=True, host = "0.0.0.0")
