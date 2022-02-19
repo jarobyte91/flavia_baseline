@@ -305,4 +305,4 @@ def download_csv(clicks, sentences, relevant):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port = 8040)
+    app.run_server(debug=True, host = "0.0.0.0", port = 8040)
