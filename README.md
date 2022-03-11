@@ -1,4 +1,4 @@
-# QuOTeS Baseline
+# QuOTeS Ground Truth
 
 ## Installation
 
