@@ -16,6 +16,7 @@ app = Dash(
     external_stylesheets = [dbc.themes.BOOTSTRAP],
     # server = server
 )
+app.title = "QuOTeS GT"
 server = app.server
 
 ###################################
@@ -45,15 +46,13 @@ tab_upload = dbc.Tab(
 # Highlights tab
 ###################################
 
-query_test = """In this paper, we propose a novel neural network model called RNN Encoder-Decoder that consists of two recurrent neural networks (RNN). One RNN encodes a sequence of symbols into a fixed-length vector representation, and the other decodes the representation into another sequence of symbols. The encoder and decoder of the proposed model are jointly trained to maximize the conditional probability of a target sequence given a source sequence. The performance of a statistical machine translation system is empirically found to improve by using the conditional probabilities of phrase pairs computed by the RNN Encoder-Decoder as an additional feature in the existing log-linear model. Qualitatively, we show that the proposed model learns a semantically and syntactically meaningful representation of linguistic phrases."""
-
 tab_highlights = dbc.Tab(
     label = "Highlights",
     children = [
         dbc.Card(
             [
                 html.H3("Query"),
-                dbc.Textarea(id = "query", value = query_test, rows = 5),
+                dbc.Textarea(id = "query", rows = 5),
             ],
            style = {"position":"sticky", "top":0}
         ),
@@ -78,8 +77,8 @@ tab_summary = dbc.Tab(
             [
                 dbc.Col(html.H3("Query")),
                 dbc.Col(),
-                dbc.Col(dbc.Card(dbc.Button("Download .txt", id = "download_txt_button")), width = 2),
-                dbc.Col(dbc.Card(dbc.Button("Download .csv", id = "download_csv_button")), width = 2),
+                dbc.Col(dbc.Card(dbc.Button("Download .txt", id = "download_txt_button")), width = 3),
+                dbc.Col(dbc.Card(dbc.Button("Download .csv", id = "download_csv_button")), width = 3),
             ]
         ),
         html.P(id = "summary_query"),
@@ -98,7 +97,7 @@ app.layout = dbc.Container(
         dcc.Store(id = "relevant"),
         dcc.Download(id = "download_txt"),
         dcc.Download(id = "download_csv"),
-        html.H1("Baseline"),
+        html.H1("QuOTeS Ground Truth Collector"),
         dbc.Tabs([tab_upload, tab_highlights, tab_summary])
     ],
     fluid = True
