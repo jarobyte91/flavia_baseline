@@ -122,6 +122,7 @@ app.layout = dbc.Container(
         dcc.Store(id = "relevant"),
         dcc.Download(id = "download_txt"),
         dcc.Download(id = "download_csv"),
+        dcc.Download(id = "download_json"),
         html.H1("QuOTeS Ground Truth"),
         dbc.Tabs([tab_upload, tab_highlights, tab_summary])
     ],
@@ -335,6 +336,31 @@ def download_csv(clicks, sentences, relevant):
             columns = ["sentence", "text", "relevant"]
         ).to_csv()
     return dict(filename = filename, content = content)
+
+@app.callback(
+    Output("download_json", "data"),
+    Input("download_json_button", "n_clicks"),
+    State("sentences", "data"),
+    State("relevant", "data"),
+    State("query", "value"),
+    prevent_initial_call = True
+)
+def download_json(clicks, sentences, relevant, query):
+    filename = "results.json"
+    content = ""
+    if sentences and relevant:
+        sentences = json.loads(sentences)
+        relevant = json.loads(relevant)
+        labels = pd.DataFrame(
+            [(i, s, r) for i, (s, r) in enumerate(zip(sentences, relevant)) if r is not None],
+            columns = ["sentence", "text", "relevant"]
+        )
+        content = dict(
+            sentences = sentences,
+            query = query,
+            labels = labels.to_json()
+        )
+    return dict(filename = filename, content = json.dumps(content))
 
 
 if __name__ == '__main__':
