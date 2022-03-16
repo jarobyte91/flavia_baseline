@@ -346,7 +346,7 @@ def download_csv(clicks, sentences, relevant):
     prevent_initial_call = True
 )
 def download_json(clicks, sentences, relevant, query):
-    filename = "results.json"
+    filename = "ground_truth_results.json"
     content = ""
     if sentences and relevant:
         sentences = json.loads(sentences)
