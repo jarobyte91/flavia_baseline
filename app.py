@@ -77,8 +77,33 @@ tab_summary = dbc.Tab(
             [
                 dbc.Col(html.H3("Query")),
                 dbc.Col(),
-                dbc.Col(dbc.Card(dbc.Button("Download .txt", id = "download_txt_button")), width = 3),
-                dbc.Col(dbc.Card(dbc.Button("Download .csv", id = "download_csv_button")), width = 3),
+                dbc.Col(
+                    dbc.Card(
+                        dbc.Button(
+                            "Download .txt", 
+                            id = "download_txt_button"
+                        )
+                    ), 
+                    width = 3
+                ),
+                dbc.Col(
+                    dbc.Card(
+                        dbc.Button(
+                            "Download .csv", 
+                            id = "download_csv_button"
+                        )
+                    ), 
+                    width = 3
+                ),
+                dbc.Col(
+                    dbc.Card(
+                        dbc.Button(
+                            "Download .json", 
+                            id = "download_json_button"
+                        )
+                    ), 
+                    width = 3
+                ),
             ]
         ),
         html.P(id = "summary_query"),
@@ -97,7 +122,7 @@ app.layout = dbc.Container(
         dcc.Store(id = "relevant"),
         dcc.Download(id = "download_txt"),
         dcc.Download(id = "download_csv"),
-        html.H1("QuOTeS Ground Truth Collector"),
+        html.H1("QuOTeS Ground Truth"),
         dbc.Tabs([tab_upload, tab_highlights, tab_summary])
     ],
     fluid = True
@@ -123,21 +148,29 @@ def update_filename(filename):
 
 @app.callback(
     Output("sentences", "data"),
+    Output("query", "value"),
     Input("process", "n_clicks"),
-    State("upload", "contents")
+    State("upload", "contents"),
+    State("upload", "filename")
 )
-def upload(clicks, contents):
+def upload(clicks, contents, filename):
     if contents:
         content_type, content_string = contents.split(',')
         decoded = base64.b64decode(content_string)
         file = BytesIO(decoded)
-        pdf = pt.PDF(file, raw = True)
-        document = "".join(pdf).replace("-\n", "").replace("\n", " ")
-        tokenizer = PunktSentenceTokenizer(document)
-        sentences = tokenizer.tokenize(document)
-        return json.dumps(sentences)
+        if filename.split(".")[-1] == "pdf":
+            pdf = pt.PDF(file, raw = True)
+            document = "".join(pdf).replace("-\n", "").replace("\n", " ")
+            tokenizer = PunktSentenceTokenizer(document)
+            sentences = tokenizer.tokenize(document)
+            return json.dumps(sentences), ""
+        else:
+            decoded = json.loads(file.read())
+            query = decoded["query"]
+            sentences = decoded["document"].split("\n\n")
+            return json.dumps(sentences), query
     else:
-        return None 
+        return None, ""
 
 @app.callback(
     Output("paper_data", "children"),
