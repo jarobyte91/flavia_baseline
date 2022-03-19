@@ -333,7 +333,7 @@ def download_csv(clicks, sentences, relevant):
         relevant = json.loads(relevant)
         content = pd.DataFrame(
             [(i, s, r) for i, (s, r) in enumerate(zip(sentences, relevant)) if r is not None],
-            columns = ["sentence", "text", "relevant"]
+            columns = ["sentence", "text", "relevance"]
         ).to_csv()
     return dict(filename = filename, content = content)
 
