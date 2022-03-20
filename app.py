@@ -353,7 +353,7 @@ def download_json(clicks, sentences, relevant, query):
         relevant = json.loads(relevant)
         labels = pd.DataFrame(
             [(i, s, r) for i, (s, r) in enumerate(zip(sentences, relevant)) if r is not None],
-            columns = ["sentence", "text", "relevant"]
+            columns = ["sentence", "text", "relevance"]
         )
         content = dict(
             sentences = sentences,
